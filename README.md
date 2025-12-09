@@ -11,6 +11,7 @@ It provides common utility commands and simple event listeners to help with day-
 - `tpa`: send teleport requests between players and accept/deny them 🔗
 - `warp`: manage named warp points (tp/add/remove/list) 🗺️
 - `home`: manage personal homes (tp/add/remove) 🏠
+- `notice`: display server notices to players on join and on command 📢
 
 > See "Commands & Permissions" below for details.
 
@@ -42,6 +43,20 @@ features:
   # Enable /warp commands - Manage server-wide warp points
   # Sub-commands: tp, add, remove, list
   warp: true
+
+  # Enable /notice command and join notice - Server announcements
+  # Players see notice on join, can use /notice view to view again
+  # Admins can use /notice set <content> to update
+  notice: true
+
+# Notice configuration
+notice:
+  # The notice content shown to players
+  # Use \n for line breaks
+  content: "Welcome to the server!\n\nPlease read the rules and have fun!"
+
+  # Notice title shown in the form
+  title: "Server Notice"
 ```
 
 ### How to Disable Features
@@ -93,6 +108,17 @@ After modifying the config, restart the server for changes to take effect.
       - Permission: `essentials.command.home.remove`
     - `home list`: list your home names. 📋
       - Permission: `essentials.command.home.list`
+
+- `notice` 📢
+  - Description: View server notice or update notice content (for admins).
+  - Subcommands:
+    - `notice view`: View the current server notice
+      - Permission: `essentials.command.notice`
+      - Shown automatically to players when they join
+    - `notice set <content>`: Update the server notice content
+      - Permission: `essentials.command.notice.set`
+      - Content can include `\n` for line breaks
+      - Changes are saved immediately to config.yml
 
 ## License 📜
 

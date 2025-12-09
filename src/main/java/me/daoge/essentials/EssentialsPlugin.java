@@ -3,6 +3,7 @@ package me.daoge.essentials;
 import lombok.Getter;
 import me.daoge.essentials.command.BackCommand;
 import me.daoge.essentials.command.HomeCommand;
+import me.daoge.essentials.command.NoticeCommand;
 import me.daoge.essentials.command.PingCommand;
 import me.daoge.essentials.command.TpaCommand;
 import me.daoge.essentials.command.WarpCommand;
@@ -28,7 +29,7 @@ public class EssentialsPlugin extends Plugin {
     @Getter
     private static EssentialsPlugin instance;
 
-    private Listener deathListener;
+    private EventListener eventListener;
     @Getter
     private WarpManager warpManager;
     @Getter
@@ -84,11 +85,18 @@ public class EssentialsPlugin extends Plugin {
             this.pluginLogger.info("Registered command: /home");
         }
 
-        // Register event listeners (only if back command is enabled)
-        if (features.getBoolean("back", true) || features.getBoolean("tpa", true)) {
+        if (features.getBoolean("notice", true)) {
+            commandRegistry.register(new NoticeCommand());
+            this.pluginLogger.info("Registered command: /notice");
+        }
+
+        // Register event listeners
+        // Need to listen to PlayerJoinEvent if notice is enabled
+        // Need to listen to EntityDieEvent and PlayerDisconnectEvent if back or tpa is enabled
+        if (features.getBoolean("back", true) || features.getBoolean("tpa", true) || features.getBoolean("notice", true)) {
             EventBus eventBus = Server.getInstance().getEventBus();
-            deathListener = new Listener();
-            eventBus.registerListener(deathListener);
+            eventListener = new EventListener();
+            eventBus.registerListener(eventListener);
         }
 
         this.pluginLogger.info("Essentials plugin enabled successfully!");
@@ -99,8 +107,8 @@ public class EssentialsPlugin extends Plugin {
         this.pluginLogger.info("Essentials plugin is disabling...");
 
         // Unregister event listeners
-        if (deathListener != null) {
-            Server.getInstance().getEventBus().unregisterListener(deathListener);
+        if (eventListener != null) {
+            Server.getInstance().getEventBus().unregisterListener(eventListener);
         }
 
         this.pluginLogger.info("Essentials plugin disabled!");
@@ -123,7 +131,14 @@ public class EssentialsPlugin extends Plugin {
             features.put("tpa", true);
             features.put("home", true);
             features.put("warp", true);
+            features.put("notice", true);
             defaultConfig.put("features", features);
+
+            // Create default notice section
+            ConfigSection noticeSection = new ConfigSection();
+            noticeSection.put("content", "Welcome to the server!\\n\\nPlease read the rules and have fun!");
+            noticeSection.put("title", "Server Notice");
+            defaultConfig.put("notice", noticeSection);
 
             // Load config with defaults
             config = new Config(configFile, Config.YAML, defaultConfig);

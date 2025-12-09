@@ -13,7 +13,7 @@ import java.util.UUID;
 
 /**
  * Back command - teleports player to their last death location
- * 
+ *
  * @author daoge
  */
 public class BackCommand extends Command {
@@ -23,6 +23,20 @@ public class BackCommand extends Command {
 
     public BackCommand() {
         super("back", "Return to your last death location", "essentials.command.back");
+    }
+
+    /**
+     * Store a death location for a player
+     */
+    public static void setDeathLocation(UUID playerUUID, Location3dc location) {
+        deathLocations.put(playerUUID, location);
+    }
+
+    /**
+     * Remove a player's death location
+     */
+    public static void removeDeathLocation(UUID playerUUID) {
+        deathLocations.remove(playerUUID);
     }
 
     @Override
@@ -55,19 +69,5 @@ public class BackCommand extends Command {
 
             return context.success();
         }, SenderType.PLAYER);
-    }
-
-    /**
-     * Store a death location for a player
-     */
-    public static void setDeathLocation(UUID playerUUID, Location3dc location) {
-        deathLocations.put(playerUUID, location);
-    }
-
-    /**
-     * Remove a player's death location
-     */
-    public static void removeDeathLocation(UUID playerUUID) {
-        deathLocations.remove(playerUUID);
     }
 }

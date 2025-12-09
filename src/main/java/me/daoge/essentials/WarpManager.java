@@ -3,11 +3,7 @@ package me.daoge.essentials;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.World;
 
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -28,12 +24,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WarpManager {
 
     private static final String WARP_FILE_NAME = "warp.json";
-    private static final Type WARP_LIST_TYPE = new TypeToken<List<WarpPoint>>() {
+    private static final Type WARP_LIST_TYPE = new TypeToken<List<LocationRecord>>() {
     }.getType();
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final Path warpFile;
-    private final Map<String, WarpPoint> warps = new ConcurrentHashMap<>();
+    private final Map<String, LocationRecord> warps = new ConcurrentHashMap<>();
 
     public WarpManager(Path dataFolder) {
         this.warpFile = dataFolder.resolve(WARP_FILE_NAME);
@@ -43,20 +39,20 @@ public class WarpManager {
     /**
      * @return immutable view of all warps
      */
-    public Collection<WarpPoint> getWarps() {
+    public Collection<LocationRecord> getWarps() {
         return warps.values();
     }
 
     /**
      * @return warp list sorted by name (case-insensitive)
      */
-    public List<WarpPoint> getSortedWarps() {
+    public List<LocationRecord> getSortedWarps() {
         return warps.values().stream()
-                .sorted(Comparator.comparing(WarpPoint::name, String.CASE_INSENSITIVE_ORDER))
+                .sorted(Comparator.comparing(LocationRecord::name, String.CASE_INSENSITIVE_ORDER))
                 .toList();
     }
 
-    public Optional<WarpPoint> getWarp(String name) {
+    public Optional<LocationRecord> getWarp(String name) {
         return Optional.ofNullable(warps.get(normalize(name)));
     }
 
@@ -75,7 +71,7 @@ public class WarpManager {
         if (warps.containsKey(key)) {
             return false;
         }
-        warps.put(key, WarpPoint.from(name, location));
+        warps.put(key, LocationRecord.from(name, location));
         save();
         return true;
     }
@@ -87,7 +83,7 @@ public class WarpManager {
      * @return true if removed
      */
     public boolean removeWarp(String name) {
-        WarpPoint removed = warps.remove(normalize(name));
+        LocationRecord removed = warps.remove(normalize(name));
         if (removed != null) {
             save();
             return true;
@@ -106,7 +102,7 @@ public class WarpManager {
             if (content.isBlank()) {
                 return;
             }
-            List<WarpPoint> loaded = gson.fromJson(content, WARP_LIST_TYPE);
+            List<LocationRecord> loaded = gson.fromJson(content, WARP_LIST_TYPE);
             if (loaded != null) {
                 loaded.forEach(warp -> warps.put(normalize(warp.name()), warp));
             }
@@ -132,59 +128,6 @@ public class WarpManager {
 
     private String normalize(String name) {
         return name.toLowerCase(Locale.ROOT);
-    }
-
-    /**
-     * Serializable warp data holder.
-     *
-     * @param name        warp name
-     * @param worldName   world display name
-     * @param dimensionId dimension id within the world
-     * @param x           x coordinate
-     * @param y           y coordinate
-     * @param z           z coordinate
-     * @param pitch       pitch
-     * @param yaw         yaw
-     */
-    public record WarpPoint(
-            String name,
-            String worldName,
-            int dimensionId,
-            double x,
-            double y,
-            double z,
-            double pitch,
-            double yaw
-    ) {
-        public Location3d toLocation() {
-            World world = Server.getInstance().getWorldPool().getWorld(worldName);
-            if (world == null) {
-                return null;
-            }
-            Dimension dimension = world.getDimension(dimensionId);
-            if (dimension == null) {
-                return null;
-            }
-            return new Location3d(x, y, z, pitch, yaw, dimension);
-        }
-
-        public static WarpPoint from(String name, Location3dc location) {
-            Dimension dimension = location.dimension();
-            if (dimension == null) {
-                throw new IllegalArgumentException("Location dimension is null");
-            }
-            World world = dimension.getWorld();
-            return new WarpPoint(
-                    name,
-                    world.getWorldData().getDisplayName(),
-                    dimension.getDimensionInfo().dimensionId(),
-                    location.x(),
-                    location.y(),
-                    location.z(),
-                    location.pitch(),
-                    location.yaw()
-            );
-        }
     }
 }
 

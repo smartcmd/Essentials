@@ -21,11 +21,11 @@ import java.io.InputStream;
 
 /**
  * Essentials plugin for Allay server
- * 
+ *
  * @author daoge
  */
 public class EssentialsPlugin extends Plugin {
-    
+
     @Getter
     private static EssentialsPlugin instance;
 
@@ -36,7 +36,7 @@ public class EssentialsPlugin extends Plugin {
     private HomeManager homeManager;
     @Getter
     private Config config;
-    
+
     @Override
     public void onLoad() {
         instance = this;
@@ -45,7 +45,7 @@ public class EssentialsPlugin extends Plugin {
         // Load configuration
         loadConfig();
     }
-    
+
     @Override
     public void onEnable() {
         this.pluginLogger.info("Essentials plugin is enabling...");
@@ -101,7 +101,7 @@ public class EssentialsPlugin extends Plugin {
 
         this.pluginLogger.info("Essentials plugin enabled successfully!");
     }
-    
+
     @Override
     public void onDisable() {
         this.pluginLogger.info("Essentials plugin is disabling...");

@@ -1,7 +1,7 @@
 package me.daoge.essentials.command;
 
 import me.daoge.essentials.WarpManager;
-import me.daoge.essentials.WarpManager.WarpPoint;
+import me.daoge.essentials.LocationRecord;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandNode;
@@ -37,7 +37,7 @@ public class WarpCommand extends Command {
                 .exec((context, entityPlayer) -> {
                     Player player = entityPlayer.getController();
 
-                    List<WarpPoint> warps = warpManager.getSortedWarps();
+                    List<LocationRecord> warps = warpManager.getSortedWarps();
                     if (warps.isEmpty()) {
                         context.addError("No warps available!");
                         return context.fail();
@@ -59,12 +59,12 @@ public class WarpCommand extends Command {
         root.key("list")
                 .permission("essentials.command.warp.list")
                 .exec((context, entityPlayer) -> {
-                    List<WarpPoint> warps = warpManager.getSortedWarps();
+                    List<LocationRecord> warps = warpManager.getSortedWarps();
                     if (warps.isEmpty()) {
                         context.addOutput(TextFormat.YELLOW + "No warps available.");
                         return context.success();
                     }
-                    String names = String.join(", ", warps.stream().map(WarpPoint::name).toList());
+                    String names = String.join(", ", warps.stream().map(LocationRecord::name).toList());
                     context.addOutput(TextFormat.GREEN + "Warps: " + names);
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER);
@@ -89,7 +89,7 @@ public class WarpCommand extends Command {
                 .exec((context, entityPlayer) -> {
                     Player player = entityPlayer.getController();
 
-                    List<WarpPoint> warps = warpManager.getSortedWarps();
+                    List<LocationRecord> warps = warpManager.getSortedWarps();
                     if (warps.isEmpty()) {
                         context.addError("No warps available to remove!");
                         return context.fail();
@@ -142,7 +142,7 @@ public class WarpCommand extends Command {
         player.viewForm(form);
     }
 
-    private void teleportPlayer(EntityPlayer entityPlayer, Player player, WarpPoint warp) {
+    private void teleportPlayer(EntityPlayer entityPlayer, Player player, LocationRecord warp) {
         var location = warp.toLocation();
         if (location == null) {
             player.sendMessage(TextFormat.RED + "Warp location is unavailable (missing world or dimension).");

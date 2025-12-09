@@ -28,9 +28,6 @@ public class EventListener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (player == null) {
-            return;
-        }
 
         // Check if notice feature is enabled
         Config config = EssentialsPlugin.getInstance().getConfig();
@@ -44,31 +41,20 @@ public class EventListener {
 
     @EventHandler
     public void onPlayerDisconnect(PlayerDisconnectEvent event) {
-        Player player = event.getPlayer();
-        if (player != null) {
-            UUID playerUUID = player.getLoginData().getUuid();
-            // Clean up TPA requests when player disconnects
-            TpaCommand.removePendingRequest(playerUUID);
-            // Clean up death location when player disconnects
-            BackCommand.removeDeathLocation(playerUUID);
-        }
+        UUID playerUUID = event.getPlayer().getLoginData().getUuid();
+        // Clean up TPA requests when player disconnects
+        TpaCommand.removePendingRequest(playerUUID);
+        // Clean up death location when player disconnects
+        BackCommand.removeDeathLocation(playerUUID);
     }
 
 
     @EventHandler
     public void onEntityDie(EntityDieEvent event) {
-        Entity entity = event.getEntity();
-
-        // Check if entity is a player
-        if (entity instanceof EntityPlayer entityPlayer) {
-            UUID playerUUID = entityPlayer.getUniqueId();
-
-            // Get the death location
-            if (entityPlayer.getLocation() != null) {
-                var deathLoc = new Location3d(entityPlayer.getLocation());
-                BackCommand.setDeathLocation(playerUUID, deathLoc);
-                log.debug("Recorded death location for player: {}", entityPlayer.getDisplayName());
-            }
+        if (event.getEntity() instanceof EntityPlayer entityPlayer) {
+            var deathLoc = new Location3d(entityPlayer.getLocation());
+            BackCommand.setDeathLocation(entityPlayer.getUniqueId(), deathLoc);
+            log.debug("Recorded death location for player: {}", entityPlayer.getDisplayName());
         }
     }
 }

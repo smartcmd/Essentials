@@ -1,7 +1,7 @@
 package me.daoge.essentials.command;
 
 import me.daoge.essentials.HomeManager;
-import me.daoge.essentials.HomeManager.HomePoint;
+import me.daoge.essentials.LocationRecord;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandNode;
@@ -38,7 +38,7 @@ public class HomeCommand extends Command {
                 .exec((context, entityPlayer) -> {
                     Player player = entityPlayer.getController();
                     UUID uuid = entityPlayer.getUniqueId();
-                    List<HomePoint> homes = homeManager.getSortedHomes(uuid);
+                    List<LocationRecord> homes = homeManager.getSortedHomes(uuid);
                     if (homes.isEmpty()) {
                         context.addError("You have no homes set!");
                         return context.fail();
@@ -74,8 +74,7 @@ public class HomeCommand extends Command {
                 .permission("essentials.command.home.remove")
                 .exec((context, entityPlayer) -> {
                     Player player = entityPlayer.getController();
-                    UUID uuid = entityPlayer.getUniqueId();
-                    List<HomePoint> homes = homeManager.getSortedHomes(uuid);
+                    List<LocationRecord> homes = homeManager.getSortedHomes(entityPlayer.getUniqueId());
                     if (homes.isEmpty()) {
                         context.addError("You have no homes to remove!");
                         return context.fail();
@@ -86,7 +85,7 @@ public class HomeCommand extends Command {
                             .content("Select a home to delete.");
 
                     homes.forEach(home -> form.button(home.name()).onClick(button -> {
-                        boolean removed = homeManager.removeHome(uuid, home.name());
+                        boolean removed = homeManager.removeHome(entityPlayer.getUniqueId(), home.name());
                         if (removed) {
                             player.sendMessage(TextFormat.YELLOW + "Removed home " + home.name() + ".");
                         } else {
@@ -103,12 +102,12 @@ public class HomeCommand extends Command {
                 .permission("essentials.command.home.list")
                 .exec((context, entityPlayer) -> {
                     UUID uuid = entityPlayer.getUniqueId();
-                    List<HomePoint> homes = homeManager.getSortedHomes(uuid);
+                    List<LocationRecord> homes = homeManager.getSortedHomes(uuid);
                     if (homes.isEmpty()) {
                         context.addOutput(TextFormat.YELLOW + "You have no homes.");
                         return context.success();
                     }
-                    String names = String.join(", ", homes.stream().map(HomePoint::name).toList());
+                    String names = String.join(", ", homes.stream().map(LocationRecord::name).toList());
                     context.addOutput(TextFormat.GREEN + "Homes: " + names);
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER);
@@ -141,7 +140,7 @@ public class HomeCommand extends Command {
         player.viewForm(form);
     }
 
-    private void teleportPlayer(EntityPlayer entityPlayer, Player player, HomePoint home) {
+    private void teleportPlayer(EntityPlayer entityPlayer, Player player, LocationRecord home) {
         var location = home.toLocation();
         if (location == null) {
             player.sendMessage(TextFormat.RED + "Home location is unavailable (missing world or dimension).");

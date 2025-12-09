@@ -25,51 +25,6 @@ public class NoticeCommand extends Command {
         super("notice", "View or update server notice", "essentials.command.notice");
     }
 
-    @Override
-    public void prepareCommandTree(CommandTree tree) {
-        CommandNode root = tree.getRoot();
-
-        // /notice - view notice
-        root.key("view").exec((context, entityPlayer) -> {
-                Player player = entityPlayer.getController();
-                if (player == null) {
-                    return context.fail();
-                }
-
-                showNotice(player);
-                return context.success();
-            }, SenderType.ACTUAL_PLAYER);
-
-        // /notice set <content> - update notice content
-        root.key("set")
-            .permission("essentials.command.notice.set")
-            .msg("content")
-            .exec((context, entityPlayer) -> {
-                Player player = entityPlayer.getController();
-                if (player == null) {
-                    return context.fail();
-                }
-
-                String content = context.getResult(1);
-                if (content == null || content.trim().isEmpty()) {
-                    context.addError("Notice content cannot be empty!");
-                    return context.fail();
-                }
-
-                // Update config
-                Config config = EssentialsPlugin.getInstance().getConfig();
-                ConfigSection noticeSection = config.getSection("notice");
-                noticeSection.put("content", content);
-                config.set("notice", noticeSection);
-                config.save();
-
-                player.sendMessage(TextFormat.GREEN + "Notice updated successfully!");
-                player.sendMessage(TextFormat.GRAY + "New content: " + content);
-
-                return context.success();
-            }, SenderType.ACTUAL_PLAYER);
-    }
-
     /**
      * Show the notice form to a player
      */
@@ -84,16 +39,52 @@ public class NoticeCommand extends Command {
         content = content.replace("\\n", "\n");
 
         SimpleForm form = Forms.simple()
-            .title(title)
-            .content(content)
-            .button("OK")
-            .onClick(button -> {
-                // Just close the form
-            })
-            .onClose(() -> {
-                // Form closed
-            });
+                .title(title)
+                .content(content)
+                .button("OK")
+                .onClick(button -> {
+                    // Just close the form
+                })
+                .onClose(() -> {
+                    // Form closed
+                });
 
         player.viewForm(form);
+    }
+
+    @Override
+    public void prepareCommandTree(CommandTree tree) {
+        CommandNode root = tree.getRoot();
+
+        // /notice - view notice
+        root.key("view").exec((context, player) -> {
+            showNotice(player.getController());
+            return context.success();
+        }, SenderType.ACTUAL_PLAYER);
+
+        // /notice set <content> - update notice content
+        root.key("set")
+                .permission("essentials.command.notice.set")
+                .msg("content")
+                .exec((context, entityPlayer) -> {
+                    Player player = entityPlayer.getController();
+                    String content = context.getResult(1);
+                    if (content == null || content.trim().isEmpty()) {
+                        context.addError("Notice content cannot be empty!");
+                        return context.fail();
+                    }
+
+                    // Update config
+                    Config config = EssentialsPlugin.getInstance().getConfig();
+                    ConfigSection noticeSection = config.getSection("notice");
+                    noticeSection.put("content", content);
+                    config.set("notice", noticeSection);
+                    config.save();
+
+                    player.sendMessage(TextFormat.GREEN + "Notice updated successfully!");
+                    player.sendMessage(TextFormat.GRAY + "New content: " + content);
+
+                    return context.success();
+                }, SenderType.ACTUAL_PLAYER);
     }
 }

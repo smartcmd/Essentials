@@ -1,13 +1,7 @@
 package me.daoge.essentials;
 
 import lombok.Getter;
-import me.daoge.essentials.command.BackCommand;
-import me.daoge.essentials.command.HomeCommand;
-import me.daoge.essentials.command.NoticeCommand;
-import me.daoge.essentials.command.PingCommand;
-import me.daoge.essentials.command.TpaCommand;
-import me.daoge.essentials.command.WarpCommand;
-
+import me.daoge.essentials.command.*;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.plugin.Plugin;

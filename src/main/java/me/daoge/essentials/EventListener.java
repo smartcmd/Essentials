@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import me.daoge.essentials.command.BackCommand;
 import me.daoge.essentials.command.NoticeCommand;
 import me.daoge.essentials.command.TpaCommand;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDieEvent;

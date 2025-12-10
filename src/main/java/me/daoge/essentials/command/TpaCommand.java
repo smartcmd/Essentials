@@ -13,7 +13,10 @@ import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * TPA command - allows players to request teleportation to another player

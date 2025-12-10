@@ -5,7 +5,6 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.form.type.SimpleForm;
 import org.allaymc.api.permission.OpPermissionCalculator;

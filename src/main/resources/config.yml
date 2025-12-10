@@ -1,0 +1,40 @@
+# Essentials Plugin Configuration
+# Control which features are enabled
+
+# Feature toggles - Set to false to disable a feature
+features:
+  # Enable /ping command - Shows player's network latency
+  ping: true
+
+  # Enable /back command - Teleport back to death location
+  back: true
+
+  # Enable /tpa command - Request to teleport to another player
+  tpa: true
+
+  # Enable /home commands - Manage personal home locations
+  # Sub-commands: tp, add, remove, list
+  home: true
+
+  # Enable /warp commands - Manage server-wide warp points
+  # Sub-commands: tp, add, remove, list
+  warp: true
+
+  # Enable /notice command and join notice - Server announcements
+  # Players see notice on join, can use /notice view to view again
+  # Admins can use /notice set <content> to update
+  notice: true
+
+  # Enable /hub and /sethub commands - Teleport to hub spawn
+  # /hub - Teleport to hub (available to all players)
+  # /sethub - Set hub location (admin only)
+  hub: true
+
+# Notice configuration
+notice:
+  # The notice content shown to players
+  # Use \n for line breaks
+  content: "Welcome to the server!\n\nPlease read the rules and have fun!"
+
+  # Notice title shown in the form
+  title: "Server Notice"

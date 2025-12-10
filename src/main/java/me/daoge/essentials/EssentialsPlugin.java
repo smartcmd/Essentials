@@ -29,6 +29,8 @@ public class EssentialsPlugin extends Plugin {
     @Getter
     private HomeManager homeManager;
     @Getter
+    private HubManager hubManager;
+    @Getter
     private Config config;
 
     @Override
@@ -47,6 +49,7 @@ public class EssentialsPlugin extends Plugin {
         // Initialize managers
         warpManager = new WarpManager(this.pluginContainer.dataFolder());
         homeManager = new HomeManager(this.pluginContainer.dataFolder());
+        hubManager = new HubManager(this.pluginContainer.dataFolder());
 
         // Get feature configuration
         ConfigSection features = config.getSection("features");
@@ -82,6 +85,12 @@ public class EssentialsPlugin extends Plugin {
         if (features.getBoolean("notice", true)) {
             commandRegistry.register(new NoticeCommand());
             this.pluginLogger.info("Registered command: /notice");
+        }
+
+        if (features.getBoolean("hub", true)) {
+            commandRegistry.register(new HubCommand(hubManager));
+            commandRegistry.register(new SetHubCommand(hubManager));
+            this.pluginLogger.info("Registered commands: /hub, /sethub");
         }
 
         // Register event listeners
@@ -126,6 +135,7 @@ public class EssentialsPlugin extends Plugin {
             features.put("home", true);
             features.put("warp", true);
             features.put("notice", true);
+            features.put("hub", true);
             defaultConfig.put("features", features);
 
             // Create default notice section

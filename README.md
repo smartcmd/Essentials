@@ -11,6 +11,7 @@ It provides common utility commands and simple event listeners to help with day-
 - `tpa`: send teleport requests between players and accept/deny them 🔗
 - `warp`: manage named warp points (tp/add/remove/list) 🗺️
 - `home`: manage personal homes (tp/add/remove) 🏠
+- `hub`: teleport to the server's hub spawn location 🏛️
 - `notice`: display server notices to players on join and on command 📢
 
 > See "Commands & Permissions" below for details.
@@ -48,6 +49,11 @@ features:
   # Players see notice on join, can use /notice view to view again
   # Admins can use /notice set <content> to update
   notice: true
+
+  # Enable /hub and /sethub commands - Teleport to hub spawn
+  # /hub - Teleport to hub (available to all players)
+  # /sethub - Set hub location (admin only)
+  hub: true
 
 # Notice configuration
 notice:
@@ -119,6 +125,16 @@ After modifying the config, restart the server for changes to take effect.
       - Permission: `essentials.command.notice.set`
       - Content can include `\n` for line breaks
       - Changes are saved immediately to config.yml
+
+- `hub` 🏛️
+  - Description: Teleport to the server's hub spawn location.
+  - Permission: `essentials.command.hub`
+  - Note: Available to all players by default
+
+- `sethub` ⚙️
+  - Description: Set the hub spawn location to your current position.
+  - Permission: `essentials.command.sethub`
+  - Note: Admin only - sets the location where players will be teleported when using `/hub`
 
 ## License 📜
 

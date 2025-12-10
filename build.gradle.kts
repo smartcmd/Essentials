@@ -18,7 +18,7 @@ allay {
 
     plugin {
         entrance = ".EssentialsPlugin"
-        authors += "daoge"
+        authors += "daoge_cmd"
         website = "https://github.com/daoge/Essentials"
     }
 }

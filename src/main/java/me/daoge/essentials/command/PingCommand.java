@@ -4,6 +4,7 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.utils.TextFormat;
 
 /**
@@ -15,6 +16,7 @@ public class PingCommand extends Command {
 
     public PingCommand() {
         super("ping", "Display your current latency", "essentials.command.ping");
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(this.permissions);
     }
 
     @Override

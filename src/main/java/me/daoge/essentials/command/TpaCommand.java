@@ -7,15 +7,13 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.form.type.ModalForm;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * TPA command - allows players to request teleportation to another player
@@ -29,6 +27,7 @@ public class TpaCommand extends Command {
 
     public TpaCommand() {
         super("tpa", "Request teleportation to another player", "essentials.command.tpa");
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(this.permissions);
     }
 
     /**

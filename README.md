@@ -75,15 +75,15 @@ After modifying the config, restart the server for changes to take effect.
 
 - `ping` 📡
   - Description: Display your current latency.
-  - Permission: `essentials.ping`
+  - Permission: `essentials.command.ping`
 
 - `back` 🧭
   - Description: Return to your last key position (e.g., death point or the position before teleport).
-  - Permission: `essentials.back`
+  - Permission: `essentials.command.back`
 
 - `tpa` 🔗
   - Description: Send a teleport request to another player, with accept/deny subcommands (if implemented).
-  - Permission: `essentials.tpa`
+  - Permission: `essentials.command.tpa`
 
 - `warp` 🗺️
   - Description: Manage and travel to named warp points.
@@ -113,7 +113,7 @@ After modifying the config, restart the server for changes to take effect.
   - Description: View server notice or update notice content (for admins).
   - Subcommands:
     - `notice view`: View the current server notice
-      - Permission: `essentials.command.notice`
+      - Permission: `essentials.command.notice.view`
       - Shown automatically to players when they join
     - `notice set <content>`: Update the server notice content
       - Permission: `essentials.command.notice.set`

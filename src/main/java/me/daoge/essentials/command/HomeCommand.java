@@ -11,10 +11,12 @@ import org.allaymc.api.form.Forms;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.SimpleForm;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.TextFormat;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -27,6 +29,13 @@ public class HomeCommand extends Command {
     public HomeCommand(HomeManager homeManager) {
         super("home", "Teleport to or manage your homes", "essentials.command.home");
         this.homeManager = homeManager;
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(Set.of(
+                "essentials.command.home",
+                "essentials.command.home.tp",
+                "essentials.command.home.add",
+                "essentials.command.home.remove",
+                "essentials.command.home.list"
+        ));
     }
 
     @Override

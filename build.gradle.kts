@@ -14,7 +14,7 @@ java {
 }
 
 allay {
-    api = "0.17.0"
+    api = "0.18.0"
 
     plugin {
         entrance = ".EssentialsPlugin"

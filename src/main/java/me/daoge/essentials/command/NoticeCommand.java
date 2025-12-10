@@ -8,10 +8,13 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.form.type.SimpleForm;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.config.Config;
 import org.allaymc.api.utils.config.ConfigSection;
+
+import java.util.Set;
 
 /**
  * Notice command - displays server notice to players
@@ -23,6 +26,11 @@ public class NoticeCommand extends Command {
 
     public NoticeCommand() {
         super("notice", "View or update server notice", "essentials.command.notice");
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(Set.of(
+                "essentials.command.notice",
+                "essentials.command.notice.view",
+                "essentials.command.notice.set"
+        ));
     }
 
     /**
@@ -57,7 +65,7 @@ public class NoticeCommand extends Command {
         CommandNode root = tree.getRoot();
 
         // /notice - view notice
-        root.key("view").exec((context, player) -> {
+        root.key("view").permission("essentials.command.notice.view").exec((context, player) -> {
             showNotice(player.getController());
             return context.success();
         }, SenderType.ACTUAL_PLAYER);

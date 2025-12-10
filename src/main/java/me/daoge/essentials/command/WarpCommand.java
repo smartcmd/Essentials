@@ -11,10 +11,12 @@ import org.allaymc.api.form.Forms;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.SimpleForm;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.TextFormat;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Warp command - manage and teleport to saved warp points.
@@ -26,6 +28,11 @@ public class WarpCommand extends Command {
     public WarpCommand(WarpManager warpManager) {
         super("warp", "Teleport to or manage warp points", "essentials.command.warp");
         this.warpManager = warpManager;
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(Set.of(
+                "essentials.command.warp",
+                "essentials.command.warp.tp",
+                "essentials.command.warp.list"
+        ));
     }
 
     @Override

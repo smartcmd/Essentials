@@ -5,6 +5,7 @@ import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.utils.TextFormat;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class BackCommand extends Command {
 
     public BackCommand() {
         super("back", "Return to your last death location", "essentials.command.back");
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(this.permissions);
     }
 
     /**

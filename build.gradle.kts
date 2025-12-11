@@ -19,7 +19,7 @@ allay {
     plugin {
         entrance = ".EssentialsPlugin"
         authors += "daoge_cmd"
-        website = "https://github.com/daoge/Essentials"
+        website = "https://github.com/smartcmd/Essentials"
     }
 }
 
